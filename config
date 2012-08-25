@@ -1,5 +1,6 @@
 RUN_SCRIPT="run"
 
+CONFIG_DIR="conf"
 VENDOR_DIR="vendor"
 
 
@@ -28,7 +29,7 @@ NGINX_URL="http://nginx.org/download/$NGINX_TAR"
 NGINX_DIR="nginx"
 
 PHP_VERSION="5.4.6"
-PHP_CONFIGURE="--enable-fpm --disable-debug  --enable-pcntl --enable-inline-optimization --with-mhash --with-iconv --with-curl=/usr --with-mysql --with-pdo-mysql --enable-mbstring --enable-mbregex --with-pcre-regex --with-openssl --enable-zip --with-zlib --with-gd"
+PHP_CONFIGURE="--enable-fpm --enable-pcntl --enable-inline-optimization --with-mhash --with-iconv --with-curl=/usr --with-mysql --with-pdo-mysql --enable-mbstring --enable-mbregex --with-pcre-regex --with-openssl --enable-zip --with-zlib --with-gd"
 PHP_TAR="php-$PHP_VERSION.tar.gz"
 PHP_SRC="php-$PHP_VERSION"
 PHP_URL="http://us.php.net/distributions/$PHP_TAR"

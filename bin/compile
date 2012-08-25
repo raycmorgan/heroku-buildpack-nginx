@@ -49,13 +49,14 @@ for file in $ROOT_FILES; do
 done
 
 # Install custom files, then defaults (if needed):
+mkdir -p $BUILD_DIR/$CONFIG_DIR
 if [[ -d $CUSTOM_DIR ]]; then
-    cp $CUSTOM_DIR/* $BUILD_DIR
+    cp $CUSTOM_DIR/* $BUILD_DIR/$CONFIG_DIR
 fi
 for default in $(ls $BP_DIR/$DEFAULT_DIR); do
     if [[ ! -f $CUSTOM_DIR/$default ]]; then
         echo "Using default $default"|arrow
-        cp $BP_DIR/$DEFAULT_DIR/$default $BUILD_DIR
+        cp $BP_DIR/$DEFAULT_DIR/$default $BUILD_DIR/$CONFIG_DIR
     fi
 done
 
@@ -125,9 +126,9 @@ cat >bin/$RUN_SCRIPT<<EOF
 
 
 # Generate config files:
-erb nginx.conf.erb > $VENDOR_DIR/$NGINX_DIR/conf/nginx.conf
-cp php.ini $VENDOR_DIR/php/php.ini
-cp php-fpm.conf $VENDOR_DIR/php/etc/php-fpm.conf
+erb $CONFIG_DIR/nginx.conf.erb > $VENDOR_DIR/$NGINX_DIR/conf/nginx.conf
+cp $CONFIG_DIR/php.ini $VENDOR_DIR/php/php.ini
+cp $CONFIG_DIR/php-fpm.conf $VENDOR_DIR/php/etc/php-fpm.conf
 
 # Initilaize logs:
 touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$NGINX_DIR/logs/error.log
