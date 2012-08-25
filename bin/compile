@@ -67,9 +67,8 @@ mkdir -p $BUILD_DIR/$VENDOR_DIR $CACHE_DIR/pkg $CACHE_DIR/src
 
 # Download PCRE:
 echo "Using PCRE $PCRE_VERSION"|arrow
-echo "Downloading"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $PCRE_TAR ]] || curl -O -# $PCRE_URL
+[[ -f $PCRE_TAR ]] || echo "Downloading"|arrow && curl -O -# $PCRE_URL
 echo "Extracting"|arrow
 tar xvf $PCRE_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
@@ -79,9 +78,8 @@ cd $PCRE_SRC
 
 # Download and install nginx:
 echo "Bundling nginx $NGINX_VERSION"|arrow
-echo "Downloading"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $NGINX_TAR ]] || curl -O -# $NGINX_URL
+[[ -f $NGINX_TAR ]] || echo "Downloading"|arrow && curl -O -# $NGINX_URL
 echo "Extracting"|arrow
 tar xvf $NGINX_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
@@ -98,9 +96,8 @@ make install 2>&1|indent
 
 # Download and install PHP:
 echo "Bundling PHP $PHP_VERSION"|arrow
-echo "Downloading"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $PHP_TAR ]] || curl -O -# $PHP_URL
+[[ -f $PHP_TAR ]] || echo "Downloading"|arrow && curl -O -# $PHP_URL
 echo "Extracting"|arrow
 tar xvf $PHP_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
@@ -139,7 +136,7 @@ touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$NGINX_DIR/logs/error.l
 # Run nginx:
 $VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR
 # Run PHP:
-$VENDOR_DIR/$PHP_DIR/bin/php-fpm -p $VENDOR_DIR/$PHP_DIR
+$VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR
 EOF
 
 chmod +x bin/$RUN_SCRIPT
