@@ -87,7 +87,7 @@ cd $CACHE_DIR/$CACHE_SRC
 mv $CACHE_DIR/$CACHE_PKG/$NGINX_SRC $CACHE_DIR/$CACHE_SRC
 cd $NGINX_SRC
 echo "Configuring"|arrow
-./configure --prefix=$BUILD_DIR/$VENDOR_DIR/$NGINX_DIR \
+./configure --prefix=$HOME/$VENDOR_DIR/$NGINX_DIR \
 $NGINX_CONFIGURE 2>&1|indent
 echo "Compiling"|arrow
 make 2>&1|indent
@@ -105,8 +105,8 @@ cd $CACHE_DIR/$CACHE_SRC
 mv $CACHE_DIR/$CACHE_PKG/$PHP_SRC $CACHE_DIR/$CACHE_SRC
 cd $PHP_SRC
 echo "Configuring"|arrow
-./configure --prefix=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
---with-config-file-path=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
+./configure --prefix=$HOME/$VENDOR_DIR/$PHP_DIR \
+--with-config-file-path=$HOME/$VENDOR_DIR/$PHP_DIR \
 $PHP_CONFIGURE 2>&1|indent
 echo "Compiling"|arrow
 make 2>&1|indent
@@ -136,9 +136,9 @@ touch $VENDOR_DIR/$PHP_DIR/log/php-fpm.log
 # Open logs:
 (tail -f -n 0 $VENDOR_DIR/$NGINX_DIR/logs/*.log $VENDOR_DIR/$PHP_DIR/log/*.log &)
 # Run nginx:
-$VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR
+nginx
 # Run PHP:
-$VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR
+php-fpm
 EOF
 
 chmod +x bin/$RUN_SCRIPT
