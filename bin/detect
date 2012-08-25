@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# bin/detect BUILD_DIR
+
+
+BUILD_DIR=$1
+BIN_DIR=$(dirname $0)
+BP_DIR=$(dirname $BIN_DIR)
+
+
+# Load configs:
+source $BP_DIR/config
+[[ -f $BUILD_DIR/$CUSTOM_DIR/config ]] && source $BUILD_DIR/$CUSTOM_DIR/config
+
+
+# Loop through all possible index files (loaded from config):
+for index in $INDEX_FILES; do
+    if [[ -f $BUILD_DIR/$index ]]; then
+        MATCH=1
+    fi
+done
+
+# Alert Heroku if we found a match:
+if [[ $MATCH == 1 ]]; then
+    echo "nginx" && exit 0
+else
+    echo "no" && exit 1
+fi

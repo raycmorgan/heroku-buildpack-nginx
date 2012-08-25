@@ -1,0 +1,148 @@
+#!/bin/bash
+#
+# bin/compile BUILD_DIR CACHE_DIR
+
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+BIN_DIR=$(dirname $0)
+BP_DIR=$(dirname $BIN_DIR)
+
+
+# Load configs:
+source $BP_DIR/config
+[[ -f $BUILD_DIR/$CUSTOM_DIR/config ]] && source $BUILD_DIR/$CUSTOM_DIR/config
+
+
+# Fail hard, and fail fast:
+set -e
+set -o errexit
+set -o pipefail
+
+# Move .files:
+shopt -s dotglob
+
+
+# Quickly format output:
+arrow() {
+    sed -u "s/^/-----> /"
+}
+indent() {
+    sed -u "s/^/       /"
+}
+
+
+# Start shuffling stuff around:
+cd $BUILD_DIR
+
+# Make $WWW_DIR in $CACHE_DIR so we don't get errors, move everything into
+# it, and then move it back into $BUILD_DIR:
+mkdir -p $CACHE_DIR/$WWW_DIR
+mv * $CACHE_DIR/$WWW_DIR
+mv $CACHE_DIR/$WWW_DIR .
+
+# Rescue files:
+for file in $ROOT_FILES; do
+    if [[ -f $WWW_DIR/$file ]]; then
+        mv $WWW_DIR/$file $BUILD_DIR
+    fi
+done
+
+# Install custom files, then defaults (if needed):
+if [[ -d $CUSTOM_DIR ]]; then
+    cp $CUSTOM_DIR/* $BUILD_DIR
+fi
+for default in $(ls $BP_DIR/$DEFAULT_DIR); do
+    if [[ ! -f $CUSTOM_DIR/$default ]]; then
+        echo "Using default $default"|arrow
+        cp $BP_DIR/$DEFAULT_DIR/$default $BUILD_DIR
+    fi
+done
+
+
+# Start downloading/installing stuffs:
+mkdir -p $BUILD_DIR/$VENDOR_DIR $CACHE_DIR/pkg $CACHE_DIR/src
+
+
+# Download PCRE:
+echo "Using PCRE $PCRE_VERSION"|arrow
+echo "Downloading"|arrow
+cd $CACHE_DIR/$CACHE_PKG
+[[ -f $PCRE_TAR ]] || curl -O -# $PCRE_URL
+echo "Extracting"|arrow
+tar xvf $PCRE_TAR 2>&1|indent
+cd $CACHE_DIR/$CACHE_SRC
+[[ -d $PCRE_SRC ]] && rm -rf $PCRE_SRC
+mv $CACHE_DIR/$CACHE_PKG/$PCRE_SRC $CACHE_DIR/$CACHE_SRC
+cd $PCRE_SRC
+
+# Download and install nginx:
+echo "Bundling nginx $NGINX_VERSION"|arrow
+echo "Downloading"|arrow
+cd $CACHE_DIR/$CACHE_PKG
+[[ -f $NGINX_TAR ]] || curl -O -# $NGINX_URL
+echo "Extracting"|arrow
+tar xvf $NGINX_TAR 2>&1|indent
+cd $CACHE_DIR/$CACHE_SRC
+[[ -d $NGINX_SRC ]] && rm -rf $NGINX_SRC
+mv $CACHE_DIR/$CACHE_PKG/$NGINX_SRC $CACHE_DIR/$CACHE_SRC
+cd $NGINX_SRC
+echo "Configuring"|arrow
+./configure --prefix=$BUILD_DIR/$VENDOR_DIR/$NGINX_DIR \
+$NGINX_CONFIGURE 2>&1|indent
+echo "Compiling"|arrow
+make 2>&1|indent
+echo "Installing"|arrow
+make install 2>&1|indent
+
+# Download and install PHP:
+echo "Bundling PHP $PHP_VERSION"|arrow
+echo "Downloading"|arrow
+cd $CACHE_DIR/$CACHE_PKG
+[[ -f $PHP_TAR ]] || curl -O -# $PHP_URL
+echo "Extracting"|arrow
+tar xvf $PHP_TAR 2>&1|indent
+cd $CACHE_DIR/$CACHE_SRC
+[[ -d $PHP_SRC ]] && rm -rf $PHP_SRC
+mv $CACHE_DIR/$CACHE_PKG/$PHP_SRC $CACHE_DIR/$CACHE_SRC
+cd $PHP_SRC
+echo "Configuring"|arrow
+./configure --prefix=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
+--with-config-file-path=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
+$PHP_CONFIGURE 2>&1|indent
+echo "Compiling"|arrow
+make 2>&1|indent
+echo "Installing"|arrow
+make install 2>&1|indent
+
+
+# Generate run script:
+cd $BUILD_DIR
+mkdir -p bin
+
+cat >bin/$RUN_SCRIPT<<EOF
+#!/bin/bash
+
+
+# Generate config files:
+erb nginx.conf.erb > $VENDOR_DIR/$NGINX_DIR/conf/nginx.conf
+cp php.ini $VENDOR_DIR/php/php.ini
+cp php-fpm.conf $VENDOR_DIR/php/etc/php-fpm.conf
+
+# Initilaize logs:
+touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$NGINX_DIR/logs/error.log
+
+
+# Open logs:
+(tail -f -n 0 $VENDOR_DIR/$NGINX_DIR/logs/*.log &)
+# Run nginx:
+$VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR
+# Run PHP:
+$VENDOR_DIR/$PHP_DIR/bin/php-fpm -p $VENDOR_DIR/$PHP_DIR
+EOF
+
+chmod +x bin/$RUN_SCRIPT
+
+
+# Clean up:
+rm -rf $CACHE_DIR/$CACHE_SRC

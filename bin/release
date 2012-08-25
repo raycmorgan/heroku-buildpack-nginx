@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# bin/release $BUILD_DIR
+
+
+BUILD_DIR=$1
+BIN_DIR=$(dirname $0)
+BP_DIR=$(dirname $BIN_DIR)
+
+
+# Load configs:
+source $BP_DIR/config
+[[ -f $BUILD_DIR/$CUSTOM_DIR/config ]] && source $BUILD_DIR/$CUSTOM_DIR/config
+
+
+# Generate default config:
+cat <<EOF
+---
+config_vars:
+  PATH: $HOME/$VENDOR_DIR/$NGINX_DIR/sbin:$HOME/$VENDOR_DIR/$PHP_DIR/bin:/usr/local/bin:/usr/bin:/bin
+default_process_types:
+  web: bin/$RUN_SCRIPT
+EOF
