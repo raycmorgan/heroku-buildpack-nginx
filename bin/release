@@ -17,7 +17,7 @@ source $BP_DIR/config
 cat <<EOF
 ---
 config_vars:
-  PATH: $HOME/$VENDOR_DIR/$NGINX_DIR/sbin:$HOME/$VENDOR_DIR/$PHP_DIR/sbin:$HOME/$VENDOR_DIR/$PHP_DIR/bin:/usr/local/bin:/usr/bin:/bin
+  PATH: $HOME$VENDOR_DIR/$NGINX_DIR/sbin:$HOME$VENDOR_DIR/$PHP_DIR/sbin:$HOME$VENDOR_DIR/$PHP_DIR/bin:/usr/local/bin:/usr/bin:/bin
 default_process_types:
   web: bin/$RUN_SCRIPT
 EOF

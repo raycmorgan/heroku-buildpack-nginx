@@ -87,7 +87,7 @@ cd $CACHE_DIR/$CACHE_SRC
 mv $CACHE_DIR/$CACHE_PKG/$NGINX_SRC $CACHE_DIR/$CACHE_SRC
 cd $NGINX_SRC
 echo "Configuring"|arrow
-./configure --prefix=$HOME/$VENDOR_DIR/$NGINX_DIR \
+./configure --prefix=$HOME$VENDOR_DIR/$NGINX_DIR \
 $NGINX_CONFIGURE 2>&1|indent
 echo "Compiling"|arrow
 make 2>&1|indent
@@ -105,8 +105,8 @@ cd $CACHE_DIR/$CACHE_SRC
 mv $CACHE_DIR/$CACHE_PKG/$PHP_SRC $CACHE_DIR/$CACHE_SRC
 cd $PHP_SRC
 echo "Configuring"|arrow
-./configure --prefix=$HOME/$VENDOR_DIR/$PHP_DIR \
---with-config-file-path=$HOME/$VENDOR_DIR/$PHP_DIR \
+./configure --prefix=$HOME$VENDOR_DIR/$PHP_DIR \
+--with-config-file-path=$HOME$VENDOR_DIR/$PHP_DIR \
 $PHP_CONFIGURE 2>&1|indent
 echo "Compiling"|arrow
 make 2>&1|indent
