@@ -127,18 +127,20 @@ erb $CONFIG_DIR/nginx.conf.erb > $VENDOR_DIR/$NGINX_DIR/conf/nginx.conf
 cp $CONFIG_DIR/php.ini $VENDOR_DIR/$PHP_DIR/php.ini
 cp $CONFIG_DIR/php-fpm.conf $VENDOR_DIR/$PHP_DIR/etc/php-fpm.conf
 
+
 # Initilaize logs:
 mkdir -p $VENDOR_DIR/$NGINX_DIR/logs
 mkdir -p $VENDOR_DIR/$PHP_DIR/log
 touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$NGINX_DIR/logs/error.log
-touch $VENDOR_DIR/$PHP_DIR/var/log/access.log $VENDOR_DIR/$PHP_DIR/var/log/error.log
+touch $VENDOR_DIR/$PHP_DIR/var/log/error.log
 
 # Open logs:
 (tail -f -n 0 $VENDOR_DIR/$NGINX_DIR/logs/*.log $VENDOR_DIR/$PHP_DIR/var/log/*.log &)
-# Run nginx:
-$VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR -c conf/nginx.conf
-# Run PHP:
+
+# Start PHP:
 $VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR -c $VENDOR_DIR/$PHP_DIR/php.ini
+# Start nginx:
+$VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR -c conf/nginx.conf
 EOF
 
 chmod +x bin/$RUN_SCRIPT
