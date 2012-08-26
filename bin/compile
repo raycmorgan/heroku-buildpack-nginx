@@ -68,7 +68,7 @@ mkdir -p $BUILD_DIR/$VENDOR_DIR $CACHE_DIR/pkg $CACHE_DIR/src
 # Download PCRE:
 echo "Using PCRE $PCRE_VERSION"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $PCRE_TAR ]] || echo "Downloading"|arrow && curl -O -# $PCRE_URL
+[[ ! -f $PCRE_TAR ]] && echo "Downloading"|arrow && curl -O -# $PCRE_URL
 echo "Extracting"|arrow
 tar xvf $PCRE_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
@@ -79,7 +79,7 @@ cd $PCRE_SRC
 # Download and install nginx:
 echo "Bundling nginx $NGINX_VERSION"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $NGINX_TAR ]] || echo "Downloading"|arrow && curl -O -# $NGINX_URL
+[[ ! -f $NGINX_TAR ]] && echo "Downloading"|arrow && curl -O -# $NGINX_URL
 echo "Extracting"|arrow
 tar xvf $NGINX_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
@@ -97,7 +97,7 @@ make install 2>&1|indent
 # Download and install PHP:
 echo "Bundling PHP $PHP_VERSION"|arrow
 cd $CACHE_DIR/$CACHE_PKG
-[[ -f $PHP_TAR ]] || echo "Downloading"|arrow && curl -O -# $PHP_URL
+[[ ! -f $PHP_TAR ]] && echo "Downloading"|arrow && curl -O -# $PHP_URL
 echo "Extracting"|arrow
 tar xvf $PHP_TAR 2>&1|indent
 cd $CACHE_DIR/$CACHE_SRC
