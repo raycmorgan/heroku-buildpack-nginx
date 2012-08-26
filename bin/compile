@@ -138,7 +138,7 @@ touch $VENDOR_DIR/$PHP_DIR/var/log/access.log $VENDOR_DIR/$PHP_DIR/var/log/error
 # Run nginx:
 $VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR -c conf/nginx.conf
 # Run PHP:
-$VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR -c $VENDOR_DIR/$PHP_DIR/php.ini -y $VENDOR_DIR/$PHP_DIR/etc/php-fpm.conf
+$VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR -c $VENDOR_DIR/$PHP_DIR/php.ini
 EOF
 
 chmod +x bin/$RUN_SCRIPT
