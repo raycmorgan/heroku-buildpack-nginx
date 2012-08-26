@@ -131,7 +131,7 @@ cp $CONFIG_DIR/php-fpm.conf $VENDOR_DIR/$PHP_DIR/etc/php-fpm.conf
 mkdir -p $VENDOR_DIR/$NGINX_DIR/logs
 mkdir -p $VENDOR_DIR/$PHP_DIR/log
 touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$NGINX_DIR/logs/error.log
-touch $VENDOR_DIR/$PHP_DIR/var/log/php-fpm.log
+touch $VENDOR_DIR/$NGINX_DIR/logs/access.log $VENDOR_DIR/$PHP_DIR/var/log/error.log
 
 # Open logs:
 (tail -f -n 0 $VENDOR_DIR/$NGINX_DIR/logs/*.log $VENDOR_DIR/$PHP_DIR/var/log/*.log &)
