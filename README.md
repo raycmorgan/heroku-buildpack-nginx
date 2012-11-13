@@ -45,8 +45,10 @@ like).
 
 If you want to get real fancy, you can alter some config files:
 
-* [config][]
-* [nginx.conf.erb][]
+* [config]
+* [php.ini]
+* [php-fpm.conf]
+* [nginx.conf.erb]
 
 To use them, simply copy either (or both) of these files into your project,
 in the `config/` directory. You can then edit them (they are very
