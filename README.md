@@ -56,9 +56,7 @@ self-explanatory), and they will automagicly be used on the next build.
 
 ## Hacking
 
-Fork this repo, and substitute any URLs with your own.
-
-Pull requests are welcome.
+Fork this repo, and submit a pull request.
 
 ## License
 
