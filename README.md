@@ -72,7 +72,7 @@ Pull requests are welcome.
 [config]: https://github.com/neersighted/heroku-buildpack-nginx/blob/master/config
 [nginx.conf.erb]: https://github.com/neersighted/heroku-buildpack-nginx/blob/master/default/nginx.conf.erb
 [php.ini]: https://github.com/neersighted/heroku-buildpack-nginx/blob/master/default/php.ini
-[php-fpm.conf](https://github.com/neersighted/heroku-buildpack-nginx/blob/master/default/php-fpm.conf
+[php-fpm.conf]: https://github.com/neersighted/heroku-buildpack-nginx/blob/master/default/php-fpm.conf
 
 
 
