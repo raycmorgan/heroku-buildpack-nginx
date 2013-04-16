@@ -94,25 +94,6 @@ make 2>&1|indent
 echo "Installing"|arrow
 make install 2>&1|indent
 
-# Download and install PHP:
-echo "Bundling PHP $PHP_VERSION"|arrow
-cd $CACHE_DIR/$CACHE_PKG
-[[ ! -f $PHP_TAR ]] && echo "Downloading"|arrow && curl -O -# $PHP_URL
-echo "Extracting"|arrow
-tar xvf $PHP_TAR 2>&1|indent
-cd $CACHE_DIR/$CACHE_SRC
-[[ -d $PHP_SRC ]] && rm -rf $PHP_SRC
-mv $CACHE_DIR/$CACHE_PKG/$PHP_SRC $CACHE_DIR/$CACHE_SRC
-cd $PHP_SRC
-echo "Configuring"|arrow
-./configure --prefix=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
---with-config-file-path=$BUILD_DIR/$VENDOR_DIR/$PHP_DIR \
-$PHP_CONFIGURE 2>&1|indent
-echo "Compiling"|arrow
-make 2>&1|indent
-echo "Installing"|arrow
-make install 2>&1|indent
-
 
 # Generate run script:
 cd $BUILD_DIR
@@ -124,8 +105,6 @@ cat >bin/$RUN_SCRIPT<<EOF
 
 # Generate config files:
 erb $CONFIG_DIR/nginx.conf.erb > $VENDOR_DIR/$NGINX_DIR/conf/nginx.conf
-cp $CONFIG_DIR/php.ini $VENDOR_DIR/$PHP_DIR/php.ini
-cp $CONFIG_DIR/php-fpm.conf $VENDOR_DIR/$PHP_DIR/etc/php-fpm.conf
 
 
 # Initilaize logs:
@@ -137,8 +116,6 @@ touch $VENDOR_DIR/$PHP_DIR/var/log/error.log
 # Open logs:
 (tail -f -n 0 $VENDOR_DIR/$NGINX_DIR/logs/*.log $VENDOR_DIR/$PHP_DIR/var/log/*.log &)
 
-# Start PHP:
-$VENDOR_DIR/$PHP_DIR/sbin/php-fpm -p $VENDOR_DIR/$PHP_DIR -c $VENDOR_DIR/$PHP_DIR/php.ini
 # Start nginx:
 $VENDOR_DIR/$NGINX_DIR/sbin/nginx -p $VENDOR_DIR/$NGINX_DIR -c conf/nginx.conf
 EOF
