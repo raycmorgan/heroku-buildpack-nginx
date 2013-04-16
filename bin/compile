@@ -56,8 +56,9 @@ fi
 for default in $(ls $BP_DIR/$DEFAULT_DIR); do
     echo "DEFAULT: $default"|arrow
     echo "PATH: $CUSTOM_DIR/$default"|arrow
+    echo "PATH2: $BUILD_DIR/$CONFIG_DIR"|arrow
     echo "BUILDDIR: $BUILD_DIR"|arrow
-    if [[ ! -f $CUSTOM_DIR/$default ]]; then
+    if [[ ! -f $BUILD_DIR/$CONFIG_DIR/$default ]]; then
         echo "Using default $default"|arrow
         cp $BP_DIR/$DEFAULT_DIR/$default $BUILD_DIR/$CONFIG_DIR
     fi
