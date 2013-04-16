@@ -22,7 +22,7 @@ PCRE_SRC="pcre-$PCRE_VERSION"
 PCRE_URL="ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/$PCRE_TAR"
 
 NGINX_VERSION="1.2.3"
-NGINX_CONFIGURE="--with-pcre=../pcre-$PCRE_VERSION --with-http_stub_status_module --with-http_gzip_static_module --with-http_realip_module"
+NGINX_CONFIGURE="--with-pcre=../pcre-$PCRE_VERSION --with-http_stub_status_module --with-http_gzip_static_module --with-http_realip_module --with-http_upstream_module"
 NGINX_TAR="nginx-$NGINX_VERSION.tar.gz"
 NGINX_SRC="nginx-$NGINX_VERSION"
 NGINX_URL="http://nginx.org/download/$NGINX_TAR"
